@@ -4,7 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Transient;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -24,18 +23,14 @@ public class CalculationModel {
 
   private Integer leftArgument;
   private Integer rightArgument;
-  @Transient
   private CalculationType type;
   private Integer solution;
   private String formattedSolution;
-  private String typeSymbol;
 
   public CalculationModel(CalculationType calculationType, int leftArgument, int rightArgument) {
     type = calculationType;
     this.leftArgument = leftArgument;
     this.rightArgument = rightArgument;
-    this.typeSymbol = CalculationType.toSymbol(calculationType);
-
   }
 
   /**
@@ -46,7 +41,6 @@ public class CalculationModel {
     this.leftArgument = leftArgument;
     this.rightArgument = rightArgument;
     this.solution = solution;
-    this.typeSymbol = CalculationType.toSymbol(calculationType);
   }
 
   /**

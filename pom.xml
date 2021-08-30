@@ -13,10 +13,6 @@
     <bootstrap.version>4.3.1</bootstrap.version>
     <springboot.version>2.2.0.RELEASE</springboot.version>
     <sonar.projectKey>tech.zerofiltre.testing:calculator</sonar.projectKey>
-    <sonar.coverage.exclusions>
-      **/domain/**/*.java,
-      src/test/java/*.java
-    </sonar.coverage.exclusions>
 
     <hibernate.version>5.4.24.Final</hibernate.version>
     <liquibase-core.version>4.2.0</liquibase-core.version>
@@ -25,8 +21,6 @@
     <validation-api.version>2.0.1.Final</validation-api.version>
     <javassist.version>3.27.0-GA</javassist.version>
     <jaxb-api.version>2.4.0-b180830.0359</jaxb-api.version>
-    <maven.build.timestamp.format>yyyy-MM-dd_HH-mm</maven.build.timestamp.format>
-
   </properties>
 
   <parent>
@@ -55,12 +49,6 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-devtools</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
@@ -106,7 +94,7 @@
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>1.18.30</version>
+      <version>1.18.20</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -119,10 +107,12 @@
       <artifactId>webdrivermanager</artifactId>
       <version>3.7.1</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
     <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
     </dependency>
+
   </dependencies>
 
   <profiles>
@@ -137,7 +127,7 @@
     </profile>
 
     <profile>
-      <id>uat</id>
+      <id>test</id>
       <properties>
         <activeProfile>uat</activeProfile>
       </properties>
@@ -205,10 +195,10 @@
         <version>${liquibase-maven-plugin.version}</version>
         <configuration>
           <propertyFile>src/main/resources/liquibase.properties</propertyFile>
-          <outputChangeLogFile>src/main/resources/db/changelog/db.changelog-${activeProfile}.yaml</outputChangeLogFile>
-          <changeLogFile>src/main/resources/db/changelog/db.changelog-${activeProfile}.yaml</changeLogFile>
+          <outputChangeLogFile>src/main/resources/db/changelog/db.changelog-${activeProfile}.xml</outputChangeLogFile>
+          <changeLogFile>src/main/resources/db/changelog/db.changelog-${activeProfile}.xml</changeLogFile>
           <diffChangeLogFile>
-            src/main/resources/db/changelog/changes/${activeProfile}/${maven.build.timestamp}_changelog.yaml
+            src/main/resources/db/changelog/changes/${activeProfile}/${maven.build.timestamp}_changelog.xml
           </diffChangeLogFile>
           <logging>info</logging>
         </configuration>
