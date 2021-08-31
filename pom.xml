@@ -127,7 +127,7 @@
     </profile>
 
     <profile>
-      <id>test</id>
+      <id>uat</id>
       <properties>
         <activeProfile>uat</activeProfile>
       </properties>
