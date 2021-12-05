@@ -2,13 +2,14 @@ def CONTAINER_NAME = "calculator"
 def ENV_NAME = getEnvName(env.BRANCH_NAME)
 def CONTAINER_TAG = getTag(env.BUILD_NUMBER, env.BRANCH_NAME)
 def HTTP_PORT = getHTTPPort(env.BRANCH_NAME)
+def EMAIL_RECIPIENTS = "philippe.guemkamsimo@gmail.com"
 
 
 node {
     try {
         stage('Initialize') {
-            def dockerHome = tool 'dockerlatest'
-            def mavenHome = tool 'mavenlatest'
+            def dockerHome = tool 'DockerLatest'
+            def mavenHome = tool 'MavenLatest'
             env.PATH = "${dockerHome}/bin:${mavenHome}/bin:${env.PATH}"
         }
 
@@ -22,7 +23,7 @@ node {
         }
 
         stage('Sonarqube Analysis') {
-            withSonarQubeEnv('localhost_sonarqube') {
+            withSonarQubeEnv('SonarQubeLocalServer') {
                 sh " mvn sonar:sonar -Dintegration-tests.skip=true -Dmaven.test.failure.ignore=true"
             }
             timeout(time: 1, unit: 'MINUTES') {
@@ -56,6 +57,7 @@ node {
 
     } finally {
         deleteDir()
+        sendEmail(EMAIL_RECIPIENTS);
     }
 
 }
@@ -86,28 +88,30 @@ def runApp(containerName, tag, dockerHubUser, httpPort, envName) {
     echo "Application started on port: ${httpPort} (http)"
 }
 
+def sendEmail(recipients) {
+    mail(
+            to: recipients,
+            subject: "Build ${env.BUILD_NUMBER} - ${currentBuild.currentResult} - (${currentBuild.fullDisplayName})",
+            body: "Check console output at: ${env.BUILD_URL}/console" + "\n")
+}
+
 String getEnvName(String branchName) {
-    if (branchName == 'master') {
+    if (branchName == 'main') {
         return 'prod'
-    } else if (branchName.startsWith("release-") || branchName.startsWith("hotfix-") || branchName == 'ready') {
-        return 'uat'
     }
-    return 'dev'
+    return (branchName == 'ready') ? 'uat' : 'dev'
 }
 
 String getHTTPPort(String branchName) {
-    if (branchName == 'master') {
-        return '9001'
-
-    } else if (branchName.startsWith("release-") || branchName.startsWith("hotfix-") || branchName == 'ready') {
-        return '9002'
+    if (branchName == 'main') {
+        return '9999'
     }
-    return '9003'
+    return (branchName == 'ready') ? '8888' : '8090'
 }
 
 String getTag(String buildNumber, String branchName) {
-    if (branchName == 'master') {
-        return buildNumber + '-unstable'
+    if (branchName == 'main') {
+        return buildNumber + '-stable'
     }
-    return buildNumber + '-stable'
+    return buildNumber + '-unstable'
 }
