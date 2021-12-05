@@ -12,4 +12,4 @@ spring:
     change-log: classpath:/db/changelog/db.changelog-uat.yaml
 
 server:
-  port: 9002
+  port: 8888
