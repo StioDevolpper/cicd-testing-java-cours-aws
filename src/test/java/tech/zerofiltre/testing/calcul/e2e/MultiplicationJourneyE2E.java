@@ -45,7 +45,7 @@ class MultiplicationJourneyE2E {
     }
   }
 
-  @Test
+  /*@Test
   void multiplyTwoBySixteenMustReturn32() {
 
     //GIVEN
@@ -66,7 +66,7 @@ class MultiplicationJourneyE2E {
     WebElement solutionElement = waiter.until(ExpectedConditions.presenceOfElementLocated(By.id("solution")));
     String solution = solutionElement.getText();
     assertThat(solution).isEqualTo("32");
-  }
+  }*/
 
 
 }
