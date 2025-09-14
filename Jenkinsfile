@@ -2,7 +2,6 @@ def CONTAINER_NAME = "calculator"
 def ENV_NAME = getEnvName(env.BRANCH_NAME)
 def CONTAINER_TAG = getTag(env.BUILD_NUMBER, env.BRANCH_NAME)
 def HTTP_PORT = getHTTPPort(env.BRANCH_NAME)
-def EMAIL_RECIPIENTS = "philippe.guemkamsimo@gmail.com"
 
 
 node {
@@ -57,7 +56,6 @@ node {
 
     } finally {
         deleteDir()
-        sendEmail(EMAIL_RECIPIENTS);
     }
 
 }
@@ -88,15 +86,8 @@ def runApp(containerName, tag, dockerHubUser, httpPort, envName) {
     echo "Application started on port: ${httpPort} (http)"
 }
 
-def sendEmail(recipients) {
-    mail(
-            to: recipients,
-            subject: "Build ${env.BUILD_NUMBER} - ${currentBuild.currentResult} - (${currentBuild.fullDisplayName})",
-            body: "Check console output at: ${env.BUILD_URL}/console" + "\n")
-}
-
 String getEnvName(String branchName) {
-    if (branchName == 'main') {
+    if (branchName == 'master') {
         return 'prod'
     } else if (branchName.startsWith("release-") || branchName.startsWith("hotfix-") || branchName == 'ready') {
         return 'uat'
@@ -105,7 +96,7 @@ String getEnvName(String branchName) {
 }
 
 String getHTTPPort(String branchName) {
-    if (branchName == 'main') {
+    if (branchName == 'master') {
         return '9001'
 
     } else if (branchName.startsWith("release-") || branchName.startsWith("hotfix-") || branchName == 'ready') {
@@ -115,7 +106,7 @@ String getHTTPPort(String branchName) {
 }
 
 String getTag(String buildNumber, String branchName) {
-    if (branchName == 'main') {
+    if (branchName == 'master') {
         return buildNumber + '-unstable'
     }
     return buildNumber + '-stable'
