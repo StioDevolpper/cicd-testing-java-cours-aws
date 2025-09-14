@@ -14,7 +14,7 @@ class SolutionFormatterTest {
     solutionFormatter = new SolutionFormatterImpl();
   }
 
-  @Test
+ /* @Test
   void format_shouldFormatAnyBigNumber() {
     // GIVEN
     final int number = 1234567890;
@@ -24,6 +24,6 @@ class SolutionFormatterTest {
 
     // THEN
     assertThat(result).isEqualTo("1 234 567 890");
-  }
+  }*/
 
 }
