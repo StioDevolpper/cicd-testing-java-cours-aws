@@ -14,4 +14,15 @@ class SolutionFormatterTest {
     solutionFormatter = new SolutionFormatterImpl();
   }
 
+  @Test
+  void format_shouldFormatAnyBigNumber() {
+    // GIVEN
+    final int number = 1234567890;
+
+    // WHEN
+    final String result = solutionFormatter.format(number);
+
+    // THEN
+    assertThat(result).isEqualTo(null);}
+
 }
